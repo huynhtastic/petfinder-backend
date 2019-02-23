@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "babel src -d build",
+    "nstart": "nodemon --watch src --exec 'npm run start'",
     "dstart": "npm run build && nodemon build/app.js",
     "start": "npm run build && node build/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
