@@ -34,7 +34,7 @@ export async function get(req, res, next) {
 export async function getFindParams(req, res, next) {
   try {
     let params = {
-      animals: ['barnyard', 'bird', 'cat', 'dog', 'horse', 'reptile', 'smallfurry'],
+      animal: ['barnyard', 'bird', 'cat', 'dog', 'horse', 'reptile', 'smallfurry'],
       size: {
         small: 'S',
         medium: 'M',
