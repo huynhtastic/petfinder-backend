@@ -30,3 +30,25 @@ export async function get(req, res, next) {
     next(err);
   }
 }
+
+export async function getFindParams(req, res, next) {
+  try {
+    let params = {
+      animals: ['barnyard', 'bird', 'cat', 'dog', 'horse', 'reptile', 'smallfurry'],
+      size: {
+        small: 'S',
+        medium: 'M',
+        large: 'L',
+        'extra-large': 'XL',
+      },
+      sex: {
+        male: 'M',
+        female: 'F',
+      },
+      age: ['Baby', 'Young', 'Adult', 'Senior'],
+    };
+    res.status(200).json(params);
+  } catch (err) {
+    next(err);
+  }
+}
