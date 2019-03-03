@@ -36,14 +36,14 @@ export async function getFindParams(req, res, next) {
     let params = {
       animal: ['barnyard', 'bird', 'cat', 'dog', 'horse', 'reptile', 'smallfurry'],
       size: {
-        small: 'S',
-        medium: 'M',
-        large: 'L',
-        'extra-large': 'XL',
+        Small: 'S',
+        Medium: 'M',
+        Large: 'L',
+        'Extra-large': 'XL',
       },
       sex: {
-        male: 'M',
-        female: 'F',
+        Male: 'M',
+        Female: 'F',
       },
       age: ['Baby', 'Young', 'Adult', 'Senior'],
     };

@@ -13,9 +13,11 @@ export function buildPetUrl(params, petMethod) {
   params.key = env.petKey;
   params.format = 'json';
 
-  console.log(params);
-  return buildUrl(petUrl, {
+  console.log('buildpeturl params', params);
+  let url = buildUrl(petUrl, {
     path: petMethod,
     queryParams: params,
   });
+  console.log('buildpeturl url', url);
+  return url;
 }
