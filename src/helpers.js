@@ -3,20 +3,21 @@ import fetch from 'node-fetch';
 import env from './env';
 
 const petUrl = 'http://api.petfinder.com';
-const petv2 = 'https://api.petfinder.com/v2';
-export const petMethods = {
-    GET: 'pet.get',
-    RANDOM: 'pet.getRandom',
-    FIND: 'pet.find',
+const petV2 = 'https://api.petfinder.com/v2';
+export const endpoints = {
+    ALLTYPES: 'types',
   }
 
 var token = {};
 
-
+/**
+ * Request a new authorization token from petV2 for api calls and put the token
+ * into a global token variable to keep state.
+ */
 async function __requestToken() {
   // Build everything needed to request a new token
   const path = 'oauth2/token';
-  const url = buildUrl(petv2, { path: path });
+  const url = buildUrl(petV2, { path: path });
   const body = {
     grant_type: 'client_credentials',
     client_id: env.clientId,
@@ -44,29 +45,50 @@ async function __requestToken() {
   token = tokenJson;
 }
 
-export function getToken() {
+/**
+ * Checks if the system needs to request a new auth token from petv2 and returns
+ * the value of the Authorization header used when making an api call to petV2.
+ *
+ * @returns {string} - Value for authorization header for api calls to petV2.
+ */
+export async function getTokenHeader() {
   // check if token is empty
   if (Object.entries(token).length === 0 && token.constructor === Object) {
     // token is empty; request a new one
-    __requestToken();
+    await __requestToken();
   } else if (token['expires_in'] < Math.floor((new Date).getTime() / 1000)) {
     // token expired; request a new one
-    __requestToken();
+    await __requestToken();
   }
-  return token['access_token'];
+  return `${token['token_type']} ${token['access_token']}`;
 }
 
-export function buildPetUrl(params, petMethod) {
-  // build query params by including apikey and requesting json
-  params.key = env.petKey;
-  params.format = 'json';
+/**
+ * Fetches petfinderV2 for some JSON response.
+ *
+ * @param {string} endpoint - Endpoint path to hit as defined in endpoints
+ *    variable.
+ * @param {object} params - Defines url parameters for a GET request.
+ * @param {function} next - The method to call when an error occurs.
+ *
+ * @returns {object} json - Representation of JSON returned from petV2 api call.
+ */
+export async function fetchV2ForJson(endpoint, params={}, next=console.log) {
+  try {
+    // Fetch token and build url to make api call to petV2
+    const tokenHeader = await getTokenHeader();
+    const url = buildUrl(petV2, {
+      path: endpoint,
+      params: params,
+    });
 
-  getToken()
-  console.log('buildpeturl params', params);
-  let url = buildUrl(petUrl, {
-    path: petMethod,
-    queryParams: params,
-  });
-  console.log('buildpeturl url', url);
-  return url;
+    const res = await fetch(url, {
+      method: 'GET',
+      headers: { 'Authorization': tokenHeader },
+    });
+    const json = await res.json();
+    return json;
+  } catch (err) {
+    next(err);
+  }
 }
