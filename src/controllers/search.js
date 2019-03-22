@@ -53,6 +53,7 @@ export async function getTypes(req, res, next) {
       breed: [[], 'select'],
       gender: [[], 'select'],
       coat: [[], 'select'],
+      color: [[], 'select'],
       size: [['Small', 'Medium', 'Large', 'XL'], 'select'],
       age: [['Baby', 'Young', 'Adult', 'Senior'], 'select'],
       status: [['Adoptable', 'Adopted', 'Found'], 'select'],
@@ -75,6 +76,34 @@ export async function getTypes(req, res, next) {
       types: populatedTypes,
       validParams: validParams
     });
+  } catch (err) {
+    next(err);
+  }
+}
+
+/**
+ * Returns an object filled with breeds of a certain animal type.
+ *
+ * @param {object} req - Request with "type" defined in the query URL.
+ * @param {object} res - Response to build with breed JSON stored.
+ */
+export async function getBreeds(req, res, next) {
+  try {
+    const type = req.query.type;
+    if (type !== undefined) {
+      const endpoint = endpoints.BREEDS`${type}`;
+      const json = await fetchV2ForJson(endpoint);
+      const status = json.status;
+      if (status === undefined) {
+        res.status(200).json(json);
+      } else {
+        res.status(status).end();
+      }
+    } else {
+      // Type parameter is required
+      // TODO: change 404 to informational error saying type is required
+      res.status(404).end();
+    }
   } catch (err) {
     next(err);
   }

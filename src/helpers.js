@@ -5,10 +5,15 @@ import env from './env';
 const petUrl = 'http://api.petfinder.com';
 const petV2 = 'https://api.petfinder.com/v2';
 export const endpoints = {
-    ALLTYPES: 'types',
-  }
+  ALLTYPES: 'types',
+  BREEDS: breedTag,
+}
 
 var token = {};
+
+function breedTag(strings, typeExp) {
+  return `types/${typeExp}/breeds`;
+}
 
 /**
  * Request a new authorization token from petV2 for api calls and put the token
