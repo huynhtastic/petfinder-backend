@@ -51,10 +51,10 @@ export async function getTypes(req, res, next) {
       }, 'text'],
       type: [[], 'select'],
       breed: [[], 'select'],
-      size: [['Small', 'Medium', 'Large', 'XL'], 'select'],
       gender: [[], 'select'],
-      age: [['Baby', 'Young', 'Adult', 'Senior'], 'select'],
       coat: [[], 'select'],
+      size: [['Small', 'Medium', 'Large', 'XL'], 'select'],
+      age: [['Baby', 'Young', 'Adult', 'Senior'], 'select'],
       status: [['Adoptable', 'Adopted', 'Found'], 'select'],
     };
 
