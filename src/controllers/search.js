@@ -3,28 +3,6 @@ import { fetchV2ForJson, endpoints } from '../helpers';
 export async function get(req, res, next) {
   try {
     res.status(200).send();
-    //    let url = buildPetUrl(req.params, petMethods.RANDOM);
-    //    fetch(url)
-    //      .then((petRes) => {
-    //        if (petRes.status === 200) {
-    //          return petRes.json();
-    //          res.status(200).send();
-    //        } else {
-    //          res.status(404).end();
-    //        }
-    //      })
-    //      .then((json) => {
-    //        if (json) {
-    //          let petfinder = json.petfinder;
-    //          console.log(json.petfinder);
-    //          if (petfinder.header.status.code.$t == 100) {
-    //            let res_json = {id: petfinder.petIds.id.$t};
-    //            res.status(200).json(res_json);
-    //          } else {
-    //            res.status(404).end();
-    //          }
-    //        }
-    //      });
   } catch (err) {
     next(err);
   }
@@ -102,6 +80,31 @@ export async function getBreeds(req, res, next) {
     } else {
       // Type parameter is required
       // TODO: change 404 to informational error saying type is required
+      res.status(404).end();
+    }
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function getSearchResults(req, res, next) {
+  try {
+    if (req.query) {
+      let params = req.query;
+      // V2 doesn't accept type and breed in the same query
+      if (params.breed) { delete params.type; }
+      // TODO: validate params and see if they're params that are accepted by V2
+      const endpoint = endpoints.ANIMALS;
+      const json = await fetchV2ForJson(endpoint, req.query, next);
+      const status = json.status;
+      if (status === undefined) {
+        res.status(200).json(json);
+      } else {
+        res.status(status).end();
+      }
+    } else {
+      // Query parameters needed to make a search
+      // TODO: change to informational error for query params
       res.status(404).end();
     }
   } catch (err) {

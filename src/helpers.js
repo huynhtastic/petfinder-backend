@@ -6,6 +6,7 @@ const petUrl = 'http://api.petfinder.com';
 const petV2 = 'https://api.petfinder.com/v2';
 export const endpoints = {
   ALLTYPES: 'types',
+  ANIMALS: 'animals',
   BREEDS: breedTag,
 }
 
@@ -84,7 +85,7 @@ export async function fetchV2ForJson(endpoint, params={}, next=console.log) {
     const tokenHeader = await getTokenHeader();
     const url = buildUrl(petV2, {
       path: endpoint,
-      params: params,
+      queryParams: params,
     });
 
     const res = await fetch(url, {

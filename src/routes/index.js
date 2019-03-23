@@ -1,5 +1,5 @@
 import express from 'express';
-import { get, getBreeds, getTypes } from '../controllers/search';
+import { get, getBreeds, getSearchResults, getTypes } from '../controllers/search';
 
 const searchRouter = express.Router();
 
@@ -7,5 +7,6 @@ const searchRouter = express.Router();
 searchRouter.get('/', get);
 searchRouter.get('/getTypes', getTypes);
 searchRouter.get('/getBreeds', getBreeds);
+searchRouter.get('/getSearchResults', getSearchResults);
 
 export default searchRouter;
