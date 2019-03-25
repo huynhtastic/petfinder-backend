@@ -6,11 +6,16 @@ const petUrl = 'http://api.petfinder.com';
 const petV2 = 'https://api.petfinder.com/v2';
 export const endpoints = {
   ALLTYPES: 'types',
+  ANIMAL: animalTag,
   ANIMALS: 'animals',
   BREEDS: breedTag,
 }
 
 var token = {};
+
+function animalTag(strings, animalExp) {
+  return `${endpoints.ANIMALS}/${animalExp}`;
+}
 
 function breedTag(strings, typeExp) {
   return `types/${typeExp}/breeds`;
